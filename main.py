@@ -1,14 +1,9 @@
 class Perchuk:
-    def __init__(self, name, surname, age):
+    def __init__(self, name, list, ):
         self.name = name
-        self.surname = surname
-        self.age = age
-    def info(self):
-        print(f"Student: {self.name} {self.surname}")
-    def massage(self, text):
-        print(f"Слава Україні, {self.name}. {text}")
-s1 = Perchuk("Demian", "Barabash", 35)
-s2 = Perchuk("ilur", "ilurovich", 25)
-s1.info()
-s2.info()
-s1.massage("Героям Слава")
+        self.list = list
+    def average(self):
+        print(f"Averege: {sum(self.list) / len(self.list)}")
+
+s1 = Perchuk("Demian", [9, 12, 10, 8 ,5 , 10 , 4 , 7])
+s1.average()
