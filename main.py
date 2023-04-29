@@ -1,11 +1,10 @@
-print(1)
-print(2)
-print(3)
-print(4)
-print(5)
-print(6)
-print(7)
-print(8)
-print(9)
-print(10)
-print(11)
+class Perchuk:
+    def __init__(self, name, surname, age):
+        self.name = name
+        self.surname = surname
+        self.age = age
+
+s1 = Perchuk("Demian", "Barabash", 35)
+print(s1.name)
+print(s1.surname)
+print(s1.age)
