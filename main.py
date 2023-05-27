@@ -11,7 +11,7 @@ conn.commit()
 def add_product(name, price):
     cursor.execute('INSERT INTO products (name, price) VALUES (?, ?)', (name, price))
     conn.commit()
-    print('+1.')
+    print('о +1 орк.')
 
 def delete_product(product_id):
     cursor.execute('DELETE FROM products WHERE id = ?', (product_id,))
@@ -33,10 +33,25 @@ def view_products():
 
 
 print('Слава Україні!')
-print(input("password: "))
+
 
 
 while True:
+    def login():
+        password = input('Введіть пароль для входу: ')
+        if password == 'admin':  # Змініть пароль на бажаний
+            print('Успішний вхід!')
+            return True
+        else:
+            print('Невірний пароль.')
+            return False
+
+
+    print('Ласкаво просимо до адміністративної сторони магазину!')
+
+    if not login():
+        continue
+
     print('\nМеню:')
     print('1. Шо в мене є?')
     print('2. +1 орк')
