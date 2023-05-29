@@ -1,85 +1,47 @@
-import sqlite3
-import logging
+import datetime
 
-conn = sqlite3.connect('store.db')
-cursor = conn.cursor()
+def log_event(event):
+    timestamp = datetime.datetime.now()
+    print(f"[{timestamp}] {event}")
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY,name TEXT NOT NULL,price REAL NOT NULL)
-''')
-conn.commit()
-
-def add_product(name, price):
-    cursor.execute('INSERT INTO products (name, price) VALUES (?, ?)', (name, price))
-    conn.commit()
-    print('о +1 орк.')
-
-def delete_product(product_id):
-    cursor.execute('DELETE FROM products WHERE id = ?', (product_id,))
-    conn.commit()
-    print('обмін з рус успішний.')
+def register_account():
+    username = input("Введіть ім'я користувача: ")
+    password = input("Введіть пароль: ")
 
 
-def edit_product(product_id, new_name, new_price):
-    cursor.execute('UPDATE products SET name = ?, price = ? WHERE id = ?', (new_name, new_price, product_id))
-    conn.commit()
-    print('ну все капець.')
-
-def view_products():
-    cursor.execute('SELECT * FROM products')
-    products = cursor.fetchall()
-    print('Полонені:')
-    for product in products:
-        print(f'ID: {product[0]}, Назва: {product[1]}, Ціна: {product[2]}')
+    log_event(f"Зареєстровано новий аккаунт: {username}")
 
 
-print('Слава Україні!')
+
+def login():
+    username = input("Введіть ім'я користувача: ")
+    password = input("Введіть пароль: ")
 
 
+
+    if is_valid_credentials(username, password):
+        log_event(f"Увійшов на аккаунт: {username}")
+        print("Успішний вхід в аккаунт")
+    else:
+        log_event(f"Невдала спроба входу на аккаунт: {username}")
+        print("Неправильне ім'я користувача або пароль")
+
+def is_valid_credentials(username, password):
+
+    return False
 
 while True:
-    def login():
-        password = input('Введіть пароль для входу: ')
-        if password == 'admin':  # Змініть пароль на бажаний
-            print('Успішний вхід!')
-            return True
-        else:
-            print('Невірний пароль.')
-            return False
+    print("1. Вхід в аккаунт")
+    print("2. Реєстрація аккаунта")
+    print("3. Вийти")
 
+    choice = input("Виберіть опцію: ")
 
-    print('Ласкаво просимо до адміністративної сторони магазину!')
-
-    if not login():
-        continue
-
-    print('\nМеню:')
-    print('1. Шо в мене є?')
-    print('2. +1 орк')
-    print('3. на москву!')
-    print('4. кастрація')
-    print('5. тікай з міста')
-
-    choice = input('вибирай спецоперацію: ')
-
-    if choice == '1':
-        view_products()
-    elif choice == '2':
-        name = input(': ')
-        price = float(input('Введіть ціну орка: '))
-        add_product(name, price)
-    elif choice == '3':
-        product_id = input('Введіть ID орка, якого потрібно знищити: ')
-        delete_product(product_id)
-    elif choice == '4':
-        product_id = input('Введіть ID орка, який потрібно кастрирувати: ')
-        new_name = input('Введіть нову назву орка: ')
-        new_price = float(input('Введіть нову ціну орка: '))
-        edit_product(product_id, new_name, new_price)
-    elif choice == '5':
-        print('БаНдЕрА!')
+    if choice == "1":
+        login()
+    elif choice == "2":
+        register_account()
+    elif choice == "3":
         break
     else:
-        print('еееееее ти шо не наш?????.')
-
-cursor.close()
-conn.close()
+        print("Неправильний вибір")
