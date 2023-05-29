@@ -1,47 +1,58 @@
-import datetime
-
-def log_event(event):
-    timestamp = datetime.datetime.now()
-    print(f"[{timestamp}] {event}")
-
-def register_account():
-    username = input("Введіть ім'я користувача: ")
-    password = input("Введіть пароль: ")
+import sqlite3
 
 
-    log_event(f"Зареєстровано новий аккаунт: {username}")
+conn = sqlite3.connect('products.db')
+cursor = conn.cursor()
 
+cursor.execute('''CREATE TABLE IF NOT EXISTS Products (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    price REAL,
+                    quantity INTEGER
+                )''')
 
+def add_product(name, price, quantity):
 
-def login():
-    username = input("Введіть ім'я користувача: ")
-    password = input("Введіть пароль: ")
+    cursor.execute("INSERT INTO Products (name, price, quantity) VALUES (?, ?, ?)", (name, price, quantity))
+    conn.commit()
+    print("Товар додано успішно.")
 
+def delete_product(product_id):
 
+    cursor.execute("DELETE FROM Products WHERE id = ?", (product_id,))
+    conn.commit()
+    print("Товар видалено успішно.")
 
-    if is_valid_credentials(username, password):
-        log_event(f"Увійшов на аккаунт: {username}")
-        print("Успішний вхід в аккаунт")
+def edit_product(product_id, new_name, new_price, new_quantity):
+
+    cursor.execute("UPDATE Products SET name = ?, price = ?, quantity = ? WHERE id = ?", (new_name, new_price, new_quantity, product_id))
+    conn.commit()
+    print("Товар відредаговано успішно.")
+
+def view_products():
+
+    cursor.execute("SELECT * FROM Products")
+    products = cursor.fetchall()
+    if len(products) > 0:
+        for product in products:
+            print(f"ID: {product[0]}, Назва: {product[1]}, Ціна: {product[2]}, Кількість: {product[3]}")
     else:
-        log_event(f"Невдала спроба входу на аккаунт: {username}")
-        print("Неправильне ім'я користувача або пароль")
-
-def is_valid_credentials(username, password):
-
-    return False
+        print("Список товарів порожній.")
 
 while True:
-    print("1. Вхід в аккаунт")
-    print("2. Реєстрація аккаунта")
-    print("3. Вийти")
+    print("\nМеню:")
+    print("1. Додати товар")
+    print("2. Видалити товар")
+    print("3. Редагувати товар")
+    print("4. Переглянути список товарів")
+    print("5. Вийти з програми")
 
-    choice = input("Виберіть опцію: ")
+    choice = input("Виберіть дію (1-5): ")
 
-    if choice == "1":
-        login()
-    elif choice == "2":
-        register_account()
-    elif choice == "3":
-        break
-    else:
-        print("Неправильний вибір")
+    if choice == '1':
+        name = input("Введіть назву товару: ")
+        price = float(input("Введіть ціну товару: "))
+        quantity = int(input("Введіть кількість товару: "))
+        add_product(name, price, quantity)
+    elif choice == '2':
+        product_id = int(input("Введіть ID товар"))
